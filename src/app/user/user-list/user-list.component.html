@@ -1,0 +1,19 @@
+<h3>IDONTKNOWN</h3>
+<table border="1" class="table table-bordered">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Lastname</th>
+    </tr>
+
+    @for (user of Users; track user.id){
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.lastname }}</td>
+    </tr>
+    } @empty {
+
+}
+</table>
+<!-- <button (click)="addUser()" class="btn btn-primary">Agregar Nuevo</button> -->
