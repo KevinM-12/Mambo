@@ -13,6 +13,7 @@ import { UserInterface } from '../user-list/UserInterface';
 })
 export class UserAddComponent {
   formulario = new FormGroup({
+
     id: new FormControl(''),
     name: new FormControl(''),
     lastname: new FormControl('')
@@ -25,7 +26,7 @@ export class UserAddComponent {
   }
   
   private http = inject(HttpClient);
-  private router = inject(Router);
+  private router = inject(Router)
 
   addNewUser() {
 
@@ -33,7 +34,7 @@ export class UserAddComponent {
     this.newUser.name = String(this.formulario.controls.name.value);
     this.newUser.lastname = String(this.formulario.controls.lastname.value);
 
-    this.http.post("http://localhost:8080/api/user", this.newUser).subscribe(resultado => {
+    this.http.post("http://localhost:8080/api/users", this.newUser).subscribe(resultado => {
       console.log(resultado);
     });
 
