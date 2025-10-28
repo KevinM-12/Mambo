@@ -15,6 +15,7 @@ import Swal, { SweetAlertIcon } from 'sweetalert2';
 })
 export class UserAddComponent {
   formulario = new FormGroup({
+
     id: new FormControl(''),
     name: new FormControl(''),
     lastname: new FormControl('')
@@ -38,8 +39,12 @@ export class UserAddComponent {
     this.newUser.lastname = String(this.formulario.controls.lastname.value);
 
     this.http.post("http://localhost:8080/api/users", this.newUser).subscribe(resultado => {
+<<<<<<< HEAD
       //console.log(resultado);
       this.showAlert("success", "Se guardó correctamente");
+=======
+      console.log(resultado);
+>>>>>>> origin/main
     });
   }
 

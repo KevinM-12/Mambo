@@ -14,6 +14,7 @@ import Swal, { SweetAlertIcon } from 'sweetalert2';
 export class UserListComponent {
   private http = inject(HttpClient);
   private router = inject(Router);
+
   Users: any;
   newUser: UserInterface = {
     id: 0,
@@ -56,9 +57,16 @@ export class UserListComponent {
     });
   }
 
+  addUser() {
+    this.newUser.id = 4;
+    this.newUser.name = "Mambo";
+    this.newUser.lastname = "Hachimi"
 
+    this.http.post("http://localhost:8080/api/users", this.newUser).subscribe(resultado => {
+        console.log(resultado)
+      });
+    }
   ngOnInit() {
     this.getAllUsers();
   }
-
 }
