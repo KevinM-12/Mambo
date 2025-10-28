@@ -3,6 +3,8 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserInterface } from '../user-list/UserInterface';
+import Swal, { SweetAlertIcon } from 'sweetalert2';
+
 
 @Component({
   selector: 'app-user-add',
@@ -23,9 +25,11 @@ export class UserAddComponent {
     name: "",
     lastname: ""
   }
+
+ 
   
   private http = inject(HttpClient);
-  private router = inject(Router);
+  private router = inject(Router)
 
   addNewUser() {
 
@@ -33,11 +37,34 @@ export class UserAddComponent {
     this.newUser.name = String(this.formulario.controls.name.value);
     this.newUser.lastname = String(this.formulario.controls.lastname.value);
 
-    this.http.post("http://localhost:8080/api/user", this.newUser).subscribe(resultado => {
-      console.log(resultado);
+    this.http.post("http://localhost:8080/api/users", this.newUser).subscribe(resultado => {
+      //console.log(resultado);
+      this.showAlert("success", "Se guardó correctamente");
     });
-
-    this.router.navigate(["/"]);
-    
   }
+
+  showAlert(status: SweetAlertIcon, message: string){
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: false,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+      didClose: () => {
+        //Codigo cuando termina la alerta.
+        console.log("termino");
+        this.router.navigate(["/"]);
+      }
+    });
+    Toast.fire({
+      icon: `${status}`,
+      title: `${message}`
+    });
+  }
+
 }
+
