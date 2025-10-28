@@ -27,6 +27,7 @@ export class UserUpdateComponent {
   private http = inject(HttpClient);
   private router = inject(Router)
   private route = inject(ActivatedRoute);
+  
   userId: Number = 0;
 
   ngOnInit() {
