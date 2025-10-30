@@ -39,12 +39,10 @@ export class UserAddComponent {
     this.newUser.lastname = String(this.formulario.controls.lastname.value);
 
     this.http.post("http://localhost:8080/api/users", this.newUser).subscribe(resultado => {
-<<<<<<< HEAD
       //console.log(resultado);
       this.showAlert("success", "Se guardó correctamente");
-=======
+
       console.log(resultado);
->>>>>>> origin/main
     });
   }
 
@@ -70,6 +68,8 @@ export class UserAddComponent {
       title: `${message}`
     });
   }
-
+  navigateTo(path: String){
+    this.router.navigate([path]);
+  }
 }
 

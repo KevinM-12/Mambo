@@ -48,13 +48,34 @@ export class UserListComponent {
     });
   }
 
-  addUser(){}
 
   getAllUsers() {
     this.http.get("http://localhost:8080/api/users").subscribe(Users => {
       this.Users = Users;
       console.log(Users);
     });
+  }
+
+  deleteUser(userId: String) {
+    Swal.fire({
+      title: "¿Estas seguro de eliminar?",
+      text: `Si estás seguro eliminar el registo ${userId}, Acepta`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminado",
+          text: "El registro fue eliminado",
+          icon: "success"
+        });
+
+        this.router.navigate(["/"]);
+      }
+  });
   }
 
   addUser() {
@@ -66,7 +87,19 @@ export class UserListComponent {
         console.log(resultado)
       });
     }
+
+  deleteUserById(){
+    this.http.delete(`http://localhost:8080/api/users`).subscribe(resultado => {
+      //console.log(resultado);
+      this.showAlert("success", "Se elimino correctamente");
+
+      console.log(resultado);
+    });
+  }
+
   ngOnInit() {
     this.getAllUsers();
   }
-}
+
+  }
+

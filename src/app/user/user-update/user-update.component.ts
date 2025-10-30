@@ -27,7 +27,7 @@ export class UserUpdateComponent {
   private http = inject(HttpClient);
   private router = inject(Router)
   private route = inject(ActivatedRoute);
-  
+
   userId: Number = 0;
 
   ngOnInit() {
@@ -72,4 +72,8 @@ export class UserUpdateComponent {
         title: `${message}`
       });
     }
+    
+    navigateTo(path: String){
+    this.router.navigate([path]);
+  }
 }
