@@ -7,7 +7,7 @@
         <th>Accion</th>
     </tr>
 
-    @for (user of Users; track user.id){
+    @for (user of (users | async); track user.id){
     <tr>
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>

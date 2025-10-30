@@ -3,11 +3,13 @@ import { Component, inject } from '@angular/core';
 import { UserInterface } from './UserInterface';
 import { Router } from '@angular/router';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [],
+  imports: [AsyncPipe],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
@@ -15,7 +17,9 @@ export class UserListComponent {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  Users: any;
+  private usersSubject = new BehaviorSubject<UserInterface[]>([]);
+  users: Observable<UserInterface[]> = this.usersSubject.asObservable();
+
   newUser: UserInterface = {
     id: 0,
     name: "",
@@ -50,13 +54,12 @@ export class UserListComponent {
 
 
   getAllUsers() {
-    this.http.get("http://localhost:8080/api/users").subscribe(Users => {
-      this.Users = Users;
-      console.log(Users);
+    this.http.get<UserInterface[]>("http://localhost:8080/api/users").subscribe(users => {
+      this.usersSubject.next(users);
     });
   }
 
-  deleteUser(userId: String) {
+  deleteUser(userId: number) {
     Swal.fire({
       title: "¿Estas seguro de eliminar?",
       text: `Si estás seguro eliminar el registo ${userId}, Acepta`,
@@ -67,34 +70,29 @@ export class UserListComponent {
       confirmButtonText: "Si, eliminar"
     }).then((result) => {
       if (result.isConfirmed) {
+        this.deleteUserById(userId);
         Swal.fire({
           title: "Eliminado",
           text: "El registro fue eliminado",
           icon: "success"
         });
-
-        this.router.navigate(["/"]);
       }
   });
   }
 
   addUser() {
-    this.newUser.id = 4;
-    this.newUser.name = "Mambo";
-    this.newUser.lastname = "Hachimi"
-
     this.http.post("http://localhost:8080/api/users", this.newUser).subscribe(resultado => {
         console.log(resultado)
       });
     }
 
-  deleteUserById(){
-    this.http.delete(`http://localhost:8080/api/users`).subscribe(resultado => {
-      //console.log(resultado);
-      this.showAlert("success", "Se elimino correctamente");
-
-      console.log(resultado);
-    });
+  deleteUserById(id: number){
+    this.http.delete(`http://localhost:8080/api/users/${id}`).pipe(
+      tap(() => {
+        const current = this.usersSubject.getValue();
+        this.usersSubject.next(current.filter(u => u.id !== id));
+    })
+    ).subscribe();
   }
 
   ngOnInit() {
